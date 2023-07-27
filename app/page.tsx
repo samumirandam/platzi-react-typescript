@@ -1,8 +1,10 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+import type { MouseEvent } from 'react';
+
 import { RandomFox } from '@/components/RandomFox';
 import { generateRandomID, generateRandomNumber } from '@/utils/generateRandom';
-import React, { useMemo, useState } from 'react';
 
 type ImageItem = {
   id: string;
@@ -11,21 +13,12 @@ type ImageItem = {
 };
 
 export default function Home() {
-  const foxId = useMemo(() => {
-    return generateRandomNumber();
-  }, []);
+  const [images, setImages] = useState<ImageItem[]>([]);
 
-  const [images, setImages] = useState<ImageItem[]>([
-    {
-      id: generateRandomID(),
-      url: `https://randomfox.ca/images/${foxId}.jpg`,
-      alt: `Image of fox #${foxId}`,
-    },
-  ]);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>, foxId: number) => {
+    event.preventDefault();
 
-  const handleClick = () => {
     setImages((prevState) => {
-      const foxId = generateRandomNumber();
       return [
         ...prevState,
         {
@@ -37,10 +30,24 @@ export default function Home() {
     });
   };
 
+  useEffect(() => {
+    const foxId = generateRandomNumber();
+    setImages([
+      {
+        id: generateRandomID(),
+        url: `https://randomfox.ca/images/${foxId}.jpg`,
+        alt: `Image of fox #${foxId}`,
+      },
+    ]);
+  }, []);
+
   return (
     <main className="">
       <h1>What the fox says? 🤦</h1>
-      <button type="button" onClick={() => handleClick()}>
+      <button
+        type="button"
+        onClick={(event) => handleClick(event, generateRandomNumber())}
+      >
         Add new fox
       </button>
       {images.map((image) => (
