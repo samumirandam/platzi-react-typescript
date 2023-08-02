@@ -50,14 +50,17 @@ export default function Home(): JSX.Element {
       >
         Add new fox
       </button>
-      {images.map((image) => (
-        <div key={image.id} className="p-4">
+      {images.map(({ id, url, alt }, index) => (
+        <div key={id} className="p-4">
           <LazyImage
-            src={image.url}
-            alt={image.alt}
+            src={url}
+            alt={alt}
             className="rounded bg-gray-300"
             width={320}
             height="auto"
+            onLazyLoad={(img) => {
+              console.log(`Image #${index + 1} cargada. Nodo:`, img);
+            }}
           />
         </div>
       ))}
