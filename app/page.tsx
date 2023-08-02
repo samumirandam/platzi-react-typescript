@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import type { MouseEvent } from 'react';
 
-import { RandomFox } from '@/components/RandomFox';
+import { LazyImage } from '@/components/LazyImage';
 import { generateRandomID, generateRandomNumber } from '@/utils/generateRandom';
 
 type ImageItem = {
@@ -12,7 +12,7 @@ type ImageItem = {
   alt: string;
 };
 
-export default function Home() {
+export default function Home(): JSX.Element {
   const [images, setImages] = useState<ImageItem[]>([]);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>, foxId: number) => {
@@ -52,7 +52,13 @@ export default function Home() {
       </button>
       {images.map((image) => (
         <div key={image.id} className="p-4">
-          <RandomFox image={image.url} alt={image.alt} />
+          <LazyImage
+            src={image.url}
+            alt={image.alt}
+            className="rounded bg-gray-300"
+            width={320}
+            height="auto"
+          />
         </div>
       ))}
     </main>

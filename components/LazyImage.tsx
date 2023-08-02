@@ -1,13 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
+import type { ImgHTMLAttributes } from 'react';
 
-type RandomFoxProps = {
-  image: string;
-  alt: string;
-};
+interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+  src: string;
+}
 
-export const RandomFox = ({ image, alt }: RandomFoxProps): JSX.Element => {
+export const LazyImage = ({
+  src,
+  ...imageProps
+}: LazyImageProps): JSX.Element => {
   const node = useRef<HTMLImageElement>(null);
-  const [src, setSrc] = useState(
+  const [srcCurrent, setSrcCurrent] = useState(
     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4=',
   );
 
@@ -15,7 +18,7 @@ export const RandomFox = ({ image, alt }: RandomFoxProps): JSX.Element => {
     const observer = new window.IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setSrc(image);
+          setSrcCurrent(src);
         }
       });
     });
@@ -27,17 +30,10 @@ export const RandomFox = ({ image, alt }: RandomFoxProps): JSX.Element => {
     return () => {
       observer.disconnect();
     };
-  }, [image]);
+  }, [src]);
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
-      ref={node}
-      className="rounded bg-gray-300"
-      width={320}
-      height="auto"
-      src={src}
-      alt={alt}
-    />
+    <img ref={node} src={srcCurrent} alt={imageProps.alt} {...imageProps} />
   );
 };
