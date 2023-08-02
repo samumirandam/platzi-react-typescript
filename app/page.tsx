@@ -6,14 +6,8 @@ import type { MouseEvent } from 'react';
 import { LazyImage } from '@/components/LazyImage';
 import { generateRandomID, generateRandomNumber } from '@/utils/generateRandom';
 
-type ImageItem = {
-  id: string;
-  url: string;
-  alt: string;
-};
-
 export default function Home(): JSX.Element {
-  const [images, setImages] = useState<ImageItem[]>([]);
+  const [images, setImages] = useState<IFoxImageItem[]>([]);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>, foxId: number) => {
     event.preventDefault();
